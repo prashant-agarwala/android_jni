@@ -13,7 +13,7 @@ public class Payment {
     private int created_at;
     private String currency;
     private String id;
-    private Refund[] refunds ;
+    private ArrayList<Refund> refunds ;
     //private Refund refund ;
 
     public String getAmount() {
@@ -32,7 +32,7 @@ public class Payment {
         return id;
     }
 
-    public Refund[] getRefunds() {
+    public ArrayList<Refund> getRefunds() {
         return refunds;
     }
 

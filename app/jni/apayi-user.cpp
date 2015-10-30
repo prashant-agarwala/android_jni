@@ -83,7 +83,11 @@ extern "C" {
          jmethodID refund_init = env->GetMethodID(refundClass, "<init>", "()V");
 
          std::vector <refund> refundlist = payment1.refunds();
-         jobjectArray refundObjectArray = (jobjectArray) env->NewObjectArray(refundlist.size(),refundClass, 0);
+
+         jclass clsArrayList = env->FindClass("java/util/ArrayList");
+         jmethodID constructor = env->GetMethodID(clsArrayList, "<init>", "()V");
+         jobject objArrayList = env->NewObject(clsArrayList, constructor,"");
+         jmethodID arrayListAdd = env->GetMethodID(clsArrayList, "add", "(Ljava/lang/Object;)Z");
 
          for(int i = 0; i < refundlist.size(); ++i)
          {
@@ -95,26 +99,42 @@ extern "C" {
              jfieldID fieldRefId = env->GetFieldID(refundClass, "id", "Ljava/lang/String;");
              jstring strRefund = env->NewStringUTF((const char *) refundlist[i].id().c_str());
              env->SetObjectField( cur_refund, fieldRefId , strRefund);
-
-             env->SetObjectArrayElement(refundObjectArray, i, cur_refund);
+             env->CallBooleanMethod(objArrayList, arrayListAdd, cur_refund);
          }
+             /*jobjectArray refundObjectArray = (jobjectArray) env->NewObjectArray(refundlist.size(),refundClass, 0);
+
+             for(int i = 0; i < refundlist.size(); ++i)
+             {
+                 jobject cur_refund =  env->NewObject(refundClass,refund_init );
+
+                 jfieldID fieldCreatedAt_ref = env->GetFieldID(refundClass, "created_at", "I");
+                 env->SetIntField(cur_refund,fieldCreatedAt_ref,refundlist[i].created_at());
+
+                 jfieldID fieldRefId = env->GetFieldID(refundClass, "id", "Ljava/lang/String;");
+                 jstring strRefund = env->NewStringUTF((const char *) refundlist[i].id().c_str());
+                 env->SetObjectField( cur_refund, fieldRefId , strRefund);
+
+                 env->SetObjectArrayElement(refundObjectArray, i, cur_refund);
+             }
+
+*/
+             jfieldID fieldId_refundList = env->GetFieldID(paymentClass, "refunds", "Ljava/util/ArrayList;");
+             env->SetObjectField( obj, fieldId_refundList , objArrayList);
 
 
-         jfieldID fieldId_refundList = env->GetFieldID(paymentClass, "refunds", "[Lcom/example/virtual/myapp2/Refund;");
-         env->SetObjectField( obj, fieldId_refundList , refundObjectArray);
 
          return obj;
 
 
      }
-     /*catch(apayi_business_exception &e)
+     catch(apayi_business_exception &e)
      {
 
          jclass jcls = env->FindClass("com/example/virtual/myapp2/ApayiException");
          jboolean flag = env->ExceptionCheck();
          if (flag) {
              env->ExceptionClear();
-             *//* code to handle exception *//*
+             //* code to handle exception *//*
          }
          env->ThrowNew(jcls, e.what());
          //return;
@@ -128,11 +148,11 @@ extern "C" {
          jboolean flag = env->ExceptionCheck();
          if (flag) {
              env->ExceptionClear();
-             *//* code to handle exception *//*
+             //* code to handle exception *//*
          }
          env->ThrowNew(jcls, e.what());
         // return;
-     }*/
+     }
      catch(std::exception &e)
      {
          jclass jcls = env->FindClass("java/lang/Exception");
@@ -141,10 +161,8 @@ extern "C" {
        //      env->ExceptionClear();
         // }
         // env->ThrowNew(jcls, e.what());
-         jobject obj;
          //jstring str = env->NewStringUTF((const char *) e.what()   );
          // return str ;
-         return obj;
      }
 
 }

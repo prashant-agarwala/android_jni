@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(p.getId());
                     //textview.setText(Integer.toString(p.getCreated_at()));
 
-                    System.out.println("Refund ID :" + p.getRefunds()[0].getId());
+                    //System.out.println(p.getRefunds().get(0).getId());
 
-                    textview.setText(p.getRefunds()[0].getId());
+                    textview.setText(p.getRefunds().get(0).getId());
                 } /*catch (ApayiException e) {
 
                     textview.setText("ap" + e.getMessage());
