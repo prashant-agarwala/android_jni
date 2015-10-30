@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     public native Object stringFromApayi() throws ApayiException;
-
+    public native Object getPaymentWithRefundByPaymentId(String payment_id) throws ApayiException;
     static {
         System.loadLibrary("apayi-user");
         //System.loadLibrary("apayi");
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final TextView textview = (TextView) findViewById(R.id.textHello);
                 try {
-                    Payment p = (Payment)stringFromApayi();
+                    Payment p = (Payment)getPaymentWithRefundByPaymentId("pay_6d905050b6162a5b");
                     System.out.println("************************HHHHHH*****");
                     System.out.println(p.getCreated_at());
                     //System.out.println(p.getCreated_at());
