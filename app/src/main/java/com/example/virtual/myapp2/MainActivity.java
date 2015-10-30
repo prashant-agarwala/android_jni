@@ -1,6 +1,7 @@
 package com.example.virtual.myapp2;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    public native String stringFromApayi() throws ApayiException;
+    public native Object stringFromApayi() throws ApayiException;
 
     static {
         System.loadLibrary("apayi-user");
@@ -32,13 +33,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final TextView textview = (TextView) findViewById(R.id.textHello);
                 try {
-                    String textSetter = stringFromApayi();
-                    textview.setText(textSetter);
-                } catch (ApayiException e) {
+                    Payment p = (Payment)stringFromApayi();
+                    System.out.println("************************HHHHHH*****");
+                    System.out.println(p.getCreated_at());
+                    //System.out.println(p.getCreated_at());
+                    System.out.println(p.getId());
+                    //textview.setText(Integer.toString(p.getCreated_at()));
+
+                    System.out.println("Refund ID :" + p.getRefunds()[0].getId());
+
+                    textview.setText(p.getRefunds()[0].getId());
+                } /*catch (ApayiException e) {
 
                     textview.setText("ap" + e.getMessage());
-                } catch (Exception e) {
-                    textview.setText("gen" + e.getMessage());
+                }*/ catch (Exception e) {
+                    //System.out.println(e.getMessage())
+                    textview.setText(e.getMessage());
                 }
                 //String textSetter = stringFromApayi();
                 //textview.setText(textSetter);
