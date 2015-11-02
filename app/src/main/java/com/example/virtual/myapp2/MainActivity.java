@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
 
     public native Object stringFromApayi() throws ApayiException;
     public native Object getPaymentWithRefundByPaymentId(String payment_id) throws ApayiException;
+    public native Object getRefundsForPaymentId(String payment_id, int count);
+    public native void captureByPaymentId(String txn_id, String amount, String currency);
+
     static {
         System.loadLibrary("apayi-user");
         //System.loadLibrary("apayi");
@@ -43,10 +46,13 @@ public class MainActivity extends AppCompatActivity {
                     //System.out.println(p.getRefunds().get(0).getId());
 
                     textview.setText(p.getRefunds().get(0).getId());
-                } /*catch (ApayiException e) {
 
-                    textview.setText("ap" + e.getMessage());
-                }*/ catch (Exception e) {
+                    captureByPaymentId("pay_d54f0718564aa4c4","1000","INR");
+
+                } catch (ApayiException e) {
+
+                    textview.setText("apayi_exception" + e.getMessage());
+                } catch (Exception e) {
                     //System.out.println(e.getMessage())
                     textview.setText(e.getMessage());
                 }
